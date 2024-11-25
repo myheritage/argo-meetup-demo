@@ -1,0 +1,29 @@
+kind: ApplicationSet
+group: argoproj.io/v1alpha1
+metadata:
+  name: karpenter-application-set
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    eks.myheritage.com/band: 'devops'
+spec:
+  goTemplate: true
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: 'karpenter-{{ .name }}'
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+      labels:
+        eks.myheritage.com/parent-applicationset: karpenter-application-set
+        eks.myheritage.com/band: 'devops'
+    spec:
+      destination:
+        server: '{{ .server }}'
+        namespace: kube-system
+      project: default
+      sources:
+        - repoURL: public.ecr.aws
+          targetRevision: 1.0.0
+          chart: karpenter/karpenter
