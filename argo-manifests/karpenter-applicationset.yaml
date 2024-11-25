@@ -1,5 +1,5 @@
+apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
-group: argoproj.io/v1alpha1
 metadata:
   name: karpenter-application-set
   finalizers:
